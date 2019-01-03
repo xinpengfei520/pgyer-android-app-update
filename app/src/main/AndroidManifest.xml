@@ -16,6 +16,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 蒲公英 apiKey -->
+        <meta-data
+            android:name="PGYER_API_KEY"
+            android:value="534a49154990d8e9126918fbdbee611a" />
+        <!-- 蒲公英 appKey -->
+        <meta-data
+            android:name="PGYER_APP_KEY"
+            android:value="fcbc9ccc3ad14fb977569dcbd28b0a5d" />
+
     </application>
 
 </manifest>
