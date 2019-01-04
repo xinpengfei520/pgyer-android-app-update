@@ -32,3 +32,7 @@ In MainActivity onCreate() method:
 ```
 PgyerApi.update(this);
 ```
+
+## LICENSE
+
+[Apache2.0](https://github.com/xinpengfei520/pgyer-android-app-update/blob/master/LICENSE)
