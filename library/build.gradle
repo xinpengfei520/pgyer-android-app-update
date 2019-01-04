@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -27,11 +31,43 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
 publish {
-    userOrg = 'xinpengfei520'
-    groupId = 'com.xsir'
-    artifactId = 'PgyerAppUpdate'
-    publishVersion = versions.libReleaseName
+    repoName = 'PgyerAndroidAppUpdate' // bintray 仓库名
+    userOrg = 'xinpengfei520' // bintray 注册的用户名
+    groupId = 'com.xsir' // compile 引用时的第 1 部分 groupId
+    artifactId = 'PgyerAndroidAppUpdate' // compile 引用时的第 2 部分项目名
+    publishVersion = versions.libReleaseName // compile引用时的第3部分版本号
     desc = 'update android app by pgyer app store.'
     website = 'https://github.com/xinpengfei520/pgyer-android-app-update'
 }
+
+/*
+ * 发布到 bintray
+ * ./gradlew clean build bintrayUpload -PbintrayUser=xinpengfei520 -PbintrayKey=BINTRAY_KEY -PdryRun=false
+ */

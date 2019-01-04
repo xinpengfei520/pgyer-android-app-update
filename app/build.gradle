@@ -6,8 +6,8 @@ android {
         applicationId "com.xsir.pgyerappupdate"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 2
-        versionName "1.1"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -61,10 +61,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation project(':library')
+    //implementation project(':library')
+    implementation 'com.xsir:PgyerAndroidAppUpdate:0.1'
 }
 
 /*
- * 打包命令：
+ * 打包命令:
  * ./gradlew assembleRelease
+ * 查看依赖树:
+ * ./gradlew dependencies app:dependencies
  */
