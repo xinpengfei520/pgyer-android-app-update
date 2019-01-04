@@ -56,10 +56,6 @@ public class PermissionUtils {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission);
     }
 
-    public void setOnPermissionCallback(OnPermissionCallback mOnPermissionCallback) {
-        this.mOnPermissionCallback = mOnPermissionCallback;
-    }
-
     public interface OnPermissionCallback {
         void onGranted();
 
@@ -71,9 +67,9 @@ public class PermissionUtils {
         private static final int REQUEST_CODE = 520;
 
         public static void actionStart(final Context context) {
-            Intent starter = new Intent(context, PermissionActivity.class);
-            starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(starter);
+            Intent intent = new Intent(context, PermissionActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
 
         @Override
@@ -84,7 +80,7 @@ public class PermissionUtils {
                     mInstance.mOnPermissionCallback.onGranted();
                 }
             } else {
-                String[] permissions = mInstance.mPermissions.toArray(new String[mInstance.mPermissions.size()]);
+                String[] permissions = (String[]) mInstance.mPermissions.toArray();
                 ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE);
             }
         }
