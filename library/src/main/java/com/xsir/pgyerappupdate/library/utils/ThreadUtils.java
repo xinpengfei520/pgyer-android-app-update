@@ -5,7 +5,7 @@ import android.os.Looper;
 
 /**
  * Created by x-sir on 2019/1/3 :)
- * Function:
+ * Function:线程管理工具类
  */
 public class ThreadUtils {
 

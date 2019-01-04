@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -21,14 +22,19 @@ import org.json.JSONObject;
 
 /**
  * Created by x-sir on 2019/1/3 :)
- * Function:
+ * Function:蒲公英 API 管理工具类
  */
 public class PgyerApi {
 
     private static final String TAG = "PgyerApi";
     private static final String PGYER_APP_CHECK_URL = "https://www.pgyer.com/apiv2/app/check";
 
-    public static void update(final Activity activity) {
+    /**
+     * 检查更新 APP
+     *
+     * @param activity 当前 APP 对象
+     */
+    public static void update(@NonNull final Activity activity) {
         if (activity == null) {
             throw new NullPointerException("activity is null!");
         }
@@ -56,7 +62,7 @@ public class PgyerApi {
     /**
      * 发送网络请求
      *
-     * @param activity
+     * @param activity 当前 APP 对象
      */
     private static void sendNetworkRequest(final Activity activity) {
         String apiKey = ManifestUtils.getMetaDataValueByName(activity, ManifestUtils.PGYER_API_KEY);
@@ -83,6 +89,12 @@ public class PgyerApi {
         });
     }
 
+    /**
+     * 解析 json
+     *
+     * @param activity 当前 APP 对象
+     * @param json     请求成功返回的 json
+     */
     private static void parseJson(Activity activity, String json) {
         if (!TextUtils.isEmpty(json)) {
             try {
@@ -104,6 +116,13 @@ public class PgyerApi {
         }
     }
 
+    /**
+     * 显示更新的 Dialog
+     *
+     * @param activity               当前 APP 对象
+     * @param downloadURL            最新 apk 下载的 URL
+     * @param buildUpdateDescription 最新 apk 的更新描述
+     */
     private static void showUpdateAppDialog(final Activity activity, final String downloadURL, final String buildUpdateDescription) {
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override

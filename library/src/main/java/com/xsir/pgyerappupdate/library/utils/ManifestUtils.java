@@ -24,19 +24,19 @@ public class ManifestUtils {
     /**
      * 根据 meta data 的 name 获取 value
      *
-     * @param ctx
-     * @param key
-     * @return
+     * @param context 上下文
+     * @param key     metadata 的 key
+     * @return metadata 的 value
      */
-    public static String getMetaDataValueByName(Context ctx, String key) {
-        if (ctx == null || TextUtils.isEmpty(key)) {
+    public static String getMetaDataValueByName(Context context, String key) {
+        if (context == null || TextUtils.isEmpty(key)) {
             return null;
         }
         String resultData = null;
         try {
-            PackageManager packageManager = ctx.getPackageManager();
+            PackageManager packageManager = context.getPackageManager();
             if (packageManager != null) {
-                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
+                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
                 if (applicationInfo != null) {
                     if (applicationInfo.metaData != null) {
                         resultData = applicationInfo.metaData.getString(key);

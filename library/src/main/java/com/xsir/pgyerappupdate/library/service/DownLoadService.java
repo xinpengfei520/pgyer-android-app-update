@@ -139,35 +139,38 @@ public class DownLoadService extends Service {
     }
 
     /**
-     * 重点在这里
+     * 打开文件
+     *
+     * @param file    file
+     * @param context 上下文
      */
-    public void openFile(File var0, Context var1) {
-        Intent var2 = new Intent();
-        var2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        var2.setAction(Intent.ACTION_VIEW);
+    public void openFile(File file, Context context) {
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.i(TAG, var1.getApplicationContext().getPackageName() + ".file_provider");
-            Uri uriForFile = FileProvider.getUriForFile(var1, var1.getApplicationContext().getPackageName() + ".file_provider", var0);
+            Log.i(TAG, context.getApplicationContext().getPackageName() + ".file_provider");
+            Uri uriForFile = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".file_provider", file);
             Log.i(TAG, uriForFile.getPath());
-            var2.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            var2.setDataAndType(uriForFile, var1.getContentResolver().getType(uriForFile));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(uriForFile, context.getContentResolver().getType(uriForFile));
         } else {
-            var2.setDataAndType(Uri.fromFile(var0), getMIMEType(var0));
+            intent.setDataAndType(Uri.fromFile(file), getMIMEType(file));
         }
         try {
-            var1.startActivity(var2);
-        } catch (Exception var5) {
-            var5.printStackTrace();
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
             showShort("没有找到打开此类文件的程序!");
         }
     }
 
-    public String getMIMEType(File var0) {
-        String var1 = "";
-        String var2 = var0.getName();
-        String var3 = var2.substring(var2.lastIndexOf(".") + 1, var2.length()).toLowerCase();
-        var1 = MimeTypeMap.getSingleton().getMimeTypeFromExtension(var3);
-        return var1;
+    public String getMIMEType(File file) {
+        String str = "";
+        String fileName = file.getName();
+        String lowerCase = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase();
+        str = MimeTypeMap.getSingleton().getMimeTypeFromExtension(lowerCase);
+        return str;
     }
 
     public static boolean deleteFileWithPath(String filePath) {

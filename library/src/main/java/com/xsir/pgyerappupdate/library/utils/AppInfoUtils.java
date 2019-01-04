@@ -7,7 +7,7 @@ import android.util.Log;
 
 /**
  * Created by x-sir on 2019/1/3 :)
- * Function:
+ * Function:获取 App 基本信息工具类
  */
 public class AppInfoUtils {
 
@@ -15,6 +15,9 @@ public class AppInfoUtils {
 
     /**
      * 返回当前程序版本号
+     *
+     * @param context 上下文
+     * @return 版本号
      */
     public static int getVersionCode(Context context) {
         String versionName = "";
@@ -36,13 +39,16 @@ public class AppInfoUtils {
 
     /**
      * 获取本地软件版本号名称
+     *
+     * @param context 上下文
+     * @return 版本名称
      */
-    public static String getVersionName(Context ctx) {
+    public static String getVersionName(Context context) {
         String localVersion = "";
         try {
-            PackageInfo packageInfo = ctx.getApplicationContext()
+            PackageInfo packageInfo = context.getApplicationContext()
                     .getPackageManager()
-                    .getPackageInfo(ctx.getPackageName(), 0);
+                    .getPackageInfo(context.getPackageName(), 0);
             localVersion = packageInfo.versionName;
             Log.d(TAG, "本软件的版本号。。" + localVersion);
         } catch (PackageManager.NameNotFoundException e) {
@@ -51,6 +57,12 @@ public class AppInfoUtils {
         return localVersion;
     }
 
+    /**
+     * 获取包名
+     *
+     * @param context 上下文
+     * @return 包名
+     */
     public static String getPackageName(Context context) {
         if (context == null) {
             return "";
