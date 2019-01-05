@@ -62,7 +62,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     //implementation project(':library')
-    implementation 'com.xsir:PgyerAndroidAppUpdate:0.1'
+    implementation 'com.xsir:PgyerAndroidAppUpdate:0.3'
 }
 
 /*
