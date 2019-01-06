@@ -6,8 +6,8 @@ android {
         applicationId "com.xsir.pgyerappupdate"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 4
-        versionName "1.3"
+        versionCode 6
+        versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -38,7 +38,7 @@ android {
             signingConfig signingConfigs.release
             android.applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "update-app-example-v${defaultConfig.versionName}-${releaseTime()}.apk"
+                    outputFileName = getApkName()
                 }
             }
         }
@@ -54,10 +54,6 @@ android {
     }
 }
 
-static def releaseTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
@@ -66,14 +62,58 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     //implementation project(':library')
-    implementation 'com.xsir:PgyerAndroidAppUpdate:0.4'
+    implementation 'com.xsir:PgyerAndroidAppUpdate:0.5'
 }
+
+def getApkFullPath() {
+    return rootDir.getAbsolutePath() + "/app/build/outputs/apk/release/" + getApkName()
+}
+
+def getApkName() {
+    return "update-app-example-v${android.defaultConfig.versionName}-${releaseTime()}.apk"
+}
+
+static def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+def readProperties(key) {
+    File file = rootProject.file('local.properties')
+    if (file.exists()) {
+        InputStream inputStream = rootProject.file('local.properties').newDataInputStream()
+        Properties properties = new Properties()
+        properties.load(inputStream)
+
+        if (properties.containsKey(key)) {
+            return properties.getProperty(key)
+        }
+    }
+}
+
+task("uploadApk") {
+    doLast {
+        def command = "curl -F \"file=@${getApkFullPath()}\" -F \"uKey=${readProperties('pgyer.userKey')}\" -F \"_api_key=${readProperties('pgyer.apiKey')}\" https://www.pgyer.com/apiv2/app/upload"
+        println "command:" + command
+        try {
+            exec {
+                ExecSpec execSpec ->
+                    executable 'bash'
+                    args '-c', command
+            }
+            println "uploadApk success~"
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+    }
+}
+
+uploadApk.dependsOn("assembleRelease")
 
 /*
  * 打包命令:
  * ./gradlew assembleRelease
+ * 打包上传 APK:
+ * ./gradlew :app:uploadApk
  * 查看依赖树:
  * ./gradlew dependencies app:dependencies
  */
-
-// curl -F "file=@${WORKSPACE}/app/build/outputs/apk/release/update-app-example-v1.2-2019-01-06.apk" -F "uKey=ce0e825125bfe666762b2a93feb7dee9" -F "_api_key=534a49154990d8e9126918fbdbee611a" https://www.pgyer.com/apiv2/app/upload

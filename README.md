@@ -30,7 +30,7 @@ Lastest version click to [here](https://github.com/xinpengfei520/pgyer-android-a
 In MainActivity onCreate() method:
 
 ```
-PgyerApi.update(this);
+PgyerApi.checkUpdate(this);
 ```
 
 ## LICENSE

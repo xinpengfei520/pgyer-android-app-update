@@ -67,7 +67,37 @@ publish {
     website = 'https://github.com/xinpengfei520/pgyer-android-app-update'
 }
 
+def readProperties(key) {
+    File file = rootProject.file('local.properties')
+    if (file.exists()) {
+        InputStream inputStream = rootProject.file('local.properties').newDataInputStream()
+        Properties properties = new Properties()
+        properties.load(inputStream)
+
+        if (properties.containsKey(key)) {
+            return properties.getProperty(key)
+        }
+    }
+}
+
+task("uploadBintray") {
+    doLast {
+        def command = "../gradlew clean build bintrayUpload -PbintrayUser=xinpengfei520 -PbintrayKey=${readProperties('BINTRAY_KEY')} -PdryRun=false"
+        println "command:" + command
+        try {
+            exec {
+                ExecSpec execSpec ->
+                    executable 'bash'
+                    args '-c', command
+            }
+            println "uploadBintray success~"
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+    }
+}
+
 /*
  * 发布到 bintray
- * ./gradlew clean build bintrayUpload -PbintrayUser=xinpengfei520 -PbintrayKey=BINTRAY_KEY -PdryRun=false
+ * ./gradlew :library:uploadBintray
  */
