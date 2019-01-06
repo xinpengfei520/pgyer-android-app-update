@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -34,7 +33,7 @@ public class PgyerApi {
      *
      * @param activity 当前 APP 对象
      */
-    public static void update(@NonNull final Activity activity) {
+    public static void checkUpdate(final Activity activity) {
         if (activity == null) {
             throw new NullPointerException("activity is null!");
         }
