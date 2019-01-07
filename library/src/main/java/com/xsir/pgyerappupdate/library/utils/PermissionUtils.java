@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Created by x-sir on 2019/1/3 :)
- * Function:apply dynamic mPermissions utils class.
+ * Function:apply dynamic permissions utils class.
  */
 public class PermissionUtils {
 

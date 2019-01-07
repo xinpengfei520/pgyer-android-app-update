@@ -10,11 +10,10 @@ import android.os.Looper;
 public class ThreadUtils {
 
     public static void runOnUiThread(Runnable runnable) {
-        Handler mHandler = new Handler(Looper.getMainLooper());
         if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
             runnable.run();
         } else {
-            mHandler.post(runnable);
+            new Handler(Looper.getMainLooper()).post(runnable);
         }
     }
 

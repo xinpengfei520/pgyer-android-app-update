@@ -81,9 +81,14 @@ public class PgyerApi {
             }
 
             @Override
-            public void onError(String errorMsg) {
+            public void onError(final String errorMsg) {
                 Log.e(TAG, "onError():" + errorMsg);
-                Toast.makeText(activity, errorMsg, Toast.LENGTH_SHORT).show();
+                ThreadUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity, errorMsg, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
@@ -123,12 +128,13 @@ public class PgyerApi {
      * @param buildUpdateDescription 最新 apk 的更新描述
      */
     private static void showUpdateAppDialog(final Activity activity, final String downloadURL, final String buildUpdateDescription) {
+        final String defaultDescribe = "为了更好的用户体验，强烈推荐更新！";
         ThreadUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 new AlertDialog.Builder(activity)
                         .setTitle("发现新版本")
-                        .setMessage(buildUpdateDescription)
+                        .setMessage(TextUtils.isEmpty(buildUpdateDescription) ? defaultDescribe : buildUpdateDescription)
                         .setPositiveButton("更新", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

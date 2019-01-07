@@ -97,7 +97,7 @@ task("uploadBintray") {
     }
 }
 
-/*
+/**
  * 发布到 bintray
  * ./gradlew :library:uploadBintray
  */

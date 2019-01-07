@@ -107,7 +107,7 @@ public class HttpClientUtils {
         }
     }
 
-    public static void postRequest(String requestUrl, String params, HttpClientUtils.OnRequestCallBack callBack) {
+    private static void postRequest(String requestUrl, String params, HttpClientUtils.OnRequestCallBack callBack) {
         boolean isSuccess = false;
         String message;
         InputStream inputStream = null;
