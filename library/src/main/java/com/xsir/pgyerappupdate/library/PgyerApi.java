@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -38,24 +37,20 @@ public class PgyerApi {
             throw new NullPointerException("activity is null!");
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-            PermissionUtils.getInstance().request(activity, permissions, new PermissionUtils.OnPermissionCallback() {
-                @Override
-                public void onGranted() {
-                    Log.i(TAG, "onGranted()");
-                    sendNetworkRequest(activity);
-                }
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        PermissionUtils.getInstance().request(activity, permissions, new PermissionUtils.OnPermissionCallback() {
+            @Override
+            public void onGranted() {
+                Log.i(TAG, "onGranted()");
+                sendNetworkRequest(activity);
+            }
 
-                @Override
-                public void onDenied() {
-                    Log.e(TAG, "onDenied()");
-                    Toast.makeText(activity, "您拒绝了权限！", Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            sendNetworkRequest(activity);
-        }
+            @Override
+            public void onDenied() {
+                Log.e(TAG, "onDenied()");
+                Toast.makeText(activity, "您拒绝了权限！", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**

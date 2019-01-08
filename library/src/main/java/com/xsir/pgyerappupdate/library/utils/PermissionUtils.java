@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,12 +35,16 @@ public class PermissionUtils {
     }
 
     public void request(Context context, String[] permissions, OnPermissionCallback onPermissionCallback) {
-        this.mOnPermissionCallback = onPermissionCallback;
-        mPermissions = Arrays.asList(permissions);
-        if (!isGranted(context, mPermissions)) {
-            PermissionActivity.actionStart(context);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.mOnPermissionCallback = onPermissionCallback;
+            mPermissions = Arrays.asList(permissions);
+            if (!isGranted(context, mPermissions)) {
+                PermissionActivity.actionStart(context);
+            } else {
+                this.mOnPermissionCallback.onGranted();
+            }
         } else {
-            this.mOnPermissionCallback.onGranted();
+            onPermissionCallback.onGranted();
         }
     }
 
