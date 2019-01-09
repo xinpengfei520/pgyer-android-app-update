@@ -6,8 +6,8 @@ android {
         applicationId "com.xsir.pgyerappupdate"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 8
-        versionName "1.7"
+        versionCode 9
+        versionName "1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -90,9 +90,13 @@ def readProperties(key) {
     }
 }
 
+static def getUpdateDescription() {
+    return '1.修复一些bug；\n2.提升用户体验！'
+}
+
 task("uploadApk") {
     doLast {
-        def command = "curl -F \"file=@${getApkFullPath()}\" -F \"uKey=${readProperties('pgyer.userKey')}\" -F \"_api_key=${readProperties('pgyer.apiKey')}\" https://www.pgyer.com/apiv2/app/upload"
+        def command = "curl -F \"file=@${getApkFullPath()}\" -F \"uKey=${readProperties('pgyer.userKey')}\" -F \"_api_key=${readProperties('pgyer.apiKey')}\" -F \"buildUpdateDescription=${getUpdateDescription()}\" https://www.pgyer.com/apiv2/app/upload"
         println "command:" + command
         try {
             exec {
