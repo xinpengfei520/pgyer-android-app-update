@@ -6,8 +6,8 @@ android {
         applicationId "com.xsir.pgyerappupdate"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 7
-        versionName "1.6"
+        versionCode 8
+        versionName "1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -62,7 +62,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     //implementation project(':library')
-    implementation 'com.xsir:PgyerAndroidAppUpdate:0.6'
+    implementation 'com.xsir:PgyerAndroidAppUpdate:0.8'
 }
 
 def getApkFullPath() {
