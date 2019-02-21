@@ -6,8 +6,8 @@ android {
         applicationId "com.xsir.pgyerappupdate"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 9
-        versionName "1.8"
+        versionCode 10
+        versionName "1.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -62,7 +62,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     //implementation project(':library')
-    implementation 'com.xsir:PgyerAndroidAppUpdate:0.8'
+    implementation 'com.xsir:PgyerAndroidAppUpdate:0.9'
 }
 
 def getApkFullPath() {
@@ -91,7 +91,7 @@ def readProperties(key) {
 }
 
 static def getUpdateDescription() {
-    return '1.修复一些bug；\n2.提升用户体验！'
+    return '1.发布V0.9版本库；\n2.修复一些bug；\n3.提升用户体验！'
 }
 
 task("uploadApk") {

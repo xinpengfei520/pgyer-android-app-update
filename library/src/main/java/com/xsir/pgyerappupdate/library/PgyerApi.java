@@ -48,7 +48,12 @@ public class PgyerApi {
             @Override
             public void onDenied() {
                 Log.e(TAG, "onDenied()");
-                Toast.makeText(activity, "您拒绝了权限！", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(activity)
+                        .setTitle("温馨提示")
+                        .setCancelable(false)
+                        .setMessage("您拒绝了此权限！这可能导致你 APP 以后无法下载更新，严重影响用户体验，强烈建议您稍后可在系统设置中为此 APP 手动开启相关权限。")
+                        .setNegativeButton("确定", null)
+                        .show();
             }
         });
     }
@@ -129,6 +134,7 @@ public class PgyerApi {
             public void run() {
                 new AlertDialog.Builder(activity)
                         .setTitle("发现新版本")
+                        .setCancelable(false)
                         .setMessage(TextUtils.isEmpty(buildUpdateDescription) ? defaultDescribe : buildUpdateDescription)
                         .setPositiveButton("更新", new DialogInterface.OnClickListener() {
                             @Override
