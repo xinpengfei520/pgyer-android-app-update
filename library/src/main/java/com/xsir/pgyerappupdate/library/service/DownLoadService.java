@@ -34,6 +34,7 @@ public class DownLoadService extends Service {
     private static final String APK_NAME = "apkName";
     private static final String DOWNLOAD_URL = "downloadUrl";
     private static final String TAG = "DownLoadService";
+    private static final String SUFFIX_PROVIDER = ".FileProvider";
 
     private void initDownManager() {
         manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -60,8 +61,10 @@ public class DownLoadService extends Service {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + apkName + "/" + apkName + ".apk";
         File file = new File(path);
         if (file.exists()) {
-            deleteFileWithPath(path);
+            boolean deleteResult = deleteFileWithPath(path);
+            Log.i(TAG, "deleteResult===" + deleteResult);
         }
+
         try {
             initDownManager();
         } catch (Exception e) {
@@ -94,13 +97,14 @@ public class DownLoadService extends Service {
     class DownloadCompleteReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
                 long downId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
                 if (manager.getUriForDownloadedFile(downId) != null) {
                     installAPK(context, getRealFilePath(context, manager.getUriForDownloadedFile(downId)));
                 } else {
                     showShort("下载失败!");
                 }
+
                 DownLoadService.this.stopSelf();
             }
         }
@@ -119,12 +123,16 @@ public class DownLoadService extends Service {
         if (null == uri) return null;
         final String scheme = uri.getScheme();
         String data = null;
+
         if (scheme == null)
             data = uri.getPath();
         else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
             data = uri.getPath();
         } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
-            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            Cursor cursor = context.getContentResolver().query(
+                    uri, new String[]{MediaStore.Images.ImageColumns.DATA},
+                    null, null, null);
+
             if (null != cursor) {
                 if (cursor.moveToFirst()) {
                     int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
@@ -132,9 +140,11 @@ public class DownLoadService extends Service {
                         data = cursor.getString(index);
                     }
                 }
+
                 cursor.close();
             }
         }
+
         return data;
     }
 
@@ -149,14 +159,15 @@ public class DownLoadService extends Service {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.i(TAG, context.getApplicationContext().getPackageName() + ".FileProvider");
-            Uri uriForFile = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".file_provider", file);
+            Log.i(TAG, context.getApplicationContext().getPackageName() + SUFFIX_PROVIDER);
+            Uri uriForFile = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + SUFFIX_PROVIDER, file);
             Log.i(TAG, uriForFile.getPath());
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setDataAndType(uriForFile, context.getContentResolver().getType(uriForFile));
         } else {
             intent.setDataAndType(Uri.fromFile(file), getMIMEType(file));
         }
+
         try {
             context.startActivity(intent);
         } catch (Exception e) {
@@ -166,11 +177,9 @@ public class DownLoadService extends Service {
     }
 
     public String getMIMEType(File file) {
-        String str = "";
         String fileName = file.getName();
         String lowerCase = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase();
-        str = MimeTypeMap.getSingleton().getMimeTypeFromExtension(lowerCase);
-        return str;
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(lowerCase);
     }
 
     public static boolean deleteFileWithPath(String filePath) {
@@ -178,8 +187,7 @@ public class DownLoadService extends Service {
         File f = new File(filePath);
         checker.checkDelete(filePath);
         if (f.isFile()) {
-            f.delete();
-            return true;
+            return f.delete();
         }
         return false;
     }
