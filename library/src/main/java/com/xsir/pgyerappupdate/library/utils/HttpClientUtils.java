@@ -1,7 +1,5 @@
 package com.xsir.pgyerappupdate.library.utils;
 
-import android.util.Log;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,7 +71,7 @@ public class HttpClientUtils {
                     baos.write(bytes, 0, readLen);
                 }
                 String result = baos.toString();
-                Log.i(TAG, " result:" + result);
+                XLogUtils.i(TAG, " result:" + result);
 
                 message = result;
                 isSuccess = true;
@@ -154,7 +152,7 @@ public class HttpClientUtils {
                     baos.write(bytes, 0, readLen);
                 }
                 String backStr = baos.toString();
-                Log.i(TAG, "backStr:" + backStr);
+                XLogUtils.i(TAG, "backStr:" + backStr);
 
                 message = backStr;
                 isSuccess = true;

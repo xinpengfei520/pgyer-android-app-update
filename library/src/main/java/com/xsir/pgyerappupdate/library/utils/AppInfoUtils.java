@@ -3,7 +3,6 @@ package com.xsir.pgyerappupdate.library.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 /**
  * Created by x-sir on 2019/1/3 :)
@@ -32,8 +31,9 @@ public class AppInfoUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e(TAG, "VersionInfo" + "Exception" + e);
+            XLogUtils.e(TAG, "VersionInfo" + "Exception" + e);
         }
+
         return versioncode;
     }
 
@@ -50,10 +50,11 @@ public class AppInfoUtils {
                     .getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
             localVersion = packageInfo.versionName;
-            Log.d(TAG, "本软件的版本号。。" + localVersion);
+            XLogUtils.d(TAG, "当前 App 版本号:" + localVersion);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
         return localVersion;
     }
 
@@ -68,6 +69,7 @@ public class AppInfoUtils {
             return "";
         }
         Context appContext = context.getApplicationContext();
+
         return appContext.getPackageName();
     }
 }

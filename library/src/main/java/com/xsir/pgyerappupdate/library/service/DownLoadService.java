@@ -13,11 +13,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
+
+import com.xsir.pgyerappupdate.library.cons.Constants;
+import com.xsir.pgyerappupdate.library.provider.CustomFileProvider;
+import com.xsir.pgyerappupdate.library.utils.ToastUtils;
+import com.xsir.pgyerappupdate.library.utils.XLogUtils;
 
 import java.io.File;
 
@@ -34,14 +35,12 @@ public class DownLoadService extends Service {
     private static final String APK_NAME = "apkName";
     private static final String DOWNLOAD_URL = "downloadUrl";
     private static final String TAG = "DownLoadService";
-    private static final String SUFFIX_PROVIDER = ".FileProvider";
 
     private void initDownManager() {
         manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         receiver = new DownloadCompleteReceiver();
         DownloadManager.Request down = new DownloadManager.Request(Uri.parse(url));
-        down.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE
-                | DownloadManager.Request.NETWORK_WIFI);
+        down.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
         down.setAllowedOverRoaming(false);
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         String mimeString = mimeTypeMap.getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
@@ -55,6 +54,12 @@ public class DownLoadService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        ToastUtils.showShort(getApplicationContext(), "正在下载中...");
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         url = intent.getStringExtra(DOWNLOAD_URL);
         apkName = intent.getStringExtra(APK_NAME);
@@ -62,22 +67,25 @@ public class DownLoadService extends Service {
         File file = new File(path);
         if (file.exists()) {
             boolean deleteResult = deleteFileWithPath(path);
-            Log.i(TAG, "deleteResult===" + deleteResult);
+            XLogUtils.i(TAG, "deleteResult===" + deleteResult);
         }
 
         try {
             initDownManager();
         } catch (Exception e) {
             e.printStackTrace();
+
             try {
                 Uri uri = Uri.parse("market://details?id=" + getPackageName());
                 Intent intent0 = new Intent(Intent.ACTION_VIEW, uri);
                 intent0.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent0);
             } catch (Exception ex) {
-                showShort("下载失败!");
+                e.printStackTrace();
+                ToastUtils.showShort(getApplicationContext(), "下载失败!");
             }
         }
+
         return Service.START_NOT_STICKY;
     }
 
@@ -102,7 +110,7 @@ public class DownLoadService extends Service {
                 if (manager.getUriForDownloadedFile(downId) != null) {
                     installAPK(context, getRealFilePath(context, manager.getUriForDownloadedFile(downId)));
                 } else {
-                    showShort("下载失败!");
+                    ToastUtils.showShort(getApplicationContext(), "下载失败!");
                 }
 
                 DownLoadService.this.stopSelf();
@@ -114,7 +122,7 @@ public class DownLoadService extends Service {
             if (file.exists()) {
                 openFile(file, context);
             } else {
-                showShort("下载失败!");
+                ToastUtils.showShort(getApplicationContext(), "下载失败!");
             }
         }
     }
@@ -158,12 +166,14 @@ public class DownLoadService extends Service {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Log.i(TAG, context.getApplicationContext().getPackageName() + SUFFIX_PROVIDER);
-            Uri uriForFile = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + SUFFIX_PROVIDER, file);
-            Log.i(TAG, uriForFile.getPath());
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri uriForFile = CustomFileProvider.getUriForFile(context, Constants.AUTHORITY, file);
+            XLogUtils.i(TAG, "file uri path:" + uriForFile.getPath());
+
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             intent.setDataAndType(uriForFile, context.getContentResolver().getType(uriForFile));
+
         } else {
             intent.setDataAndType(Uri.fromFile(file), getMIMEType(file));
         }
@@ -172,7 +182,7 @@ public class DownLoadService extends Service {
             context.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            showShort("没有找到打开此类文件的程序!");
+            ToastUtils.showShort(getApplicationContext(), "没有找到打开此类文件的程序!");
         }
     }
 
@@ -189,6 +199,7 @@ public class DownLoadService extends Service {
         if (f.isFile()) {
             return f.delete();
         }
+
         return false;
     }
 
@@ -196,15 +207,7 @@ public class DownLoadService extends Service {
         Intent intent = new Intent(context, DownLoadService.class);
         intent.putExtra(DOWNLOAD_URL, url);
         intent.putExtra(APK_NAME, apkName);
-        Toast.makeText(context, "正在下载中...", Toast.LENGTH_SHORT).show();
         context.startService(intent);
     }
-
-    private void showShort(String message) {
-        if (!TextUtils.isEmpty(message)) {
-            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        }
-    }
-
 }
 

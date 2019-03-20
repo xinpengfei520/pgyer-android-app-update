@@ -12,16 +12,6 @@ import android.text.TextUtils;
 public class ManifestUtils {
 
     /**
-     * 蒲公英 apiKey
-     */
-    public static final String PGYER_API_KEY = "PGYER_API_KEY";
-    /**
-     * 蒲公英 appKey
-     */
-    public static final String PGYER_APP_KEY = "PGYER_APP_KEY";
-
-
-    /**
      * 根据 meta data 的 name 获取 value
      *
      * @param context 上下文
@@ -32,7 +22,9 @@ public class ManifestUtils {
         if (context == null || TextUtils.isEmpty(key)) {
             return null;
         }
+
         String resultData = null;
+
         try {
             PackageManager packageManager = context.getPackageManager();
             if (packageManager != null) {

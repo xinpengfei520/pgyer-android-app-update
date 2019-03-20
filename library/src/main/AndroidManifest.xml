@@ -19,8 +19,8 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.FileProvider"
+            android:name=".provider.CustomFileProvider"
+            android:authorities="com.xsir.pgyerappupdate.library.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

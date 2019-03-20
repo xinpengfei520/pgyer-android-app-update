@@ -8,8 +8,8 @@ buildscript {
 
                     'supportLibrary'   : '27.1.1',
 
-                    'libReleaseCode'   : 12,
-                    'libReleaseName'   : '0.9.3'
+                    'libReleaseCode'   : 13,
+                    'libReleaseName'   : '0.9.4'
     ]
 
 
