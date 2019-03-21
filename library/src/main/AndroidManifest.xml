@@ -19,13 +19,13 @@
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
 
         <provider
-            android:name=".provider.CustomFileProvider"
+            android:name="com.xsir.pgyerappupdate.library.provider.CustomFileProvider"
             android:authorities="com.xsir.pgyerappupdate.library.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/provider_file_paths" />
         </provider>
 
     </application>
