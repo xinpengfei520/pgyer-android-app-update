@@ -39,6 +39,11 @@ PgyerApi.checkUpdate(this);
 
 ## 2.Update Log
 
+### v0.9.6
+
+- fix bug；
+- 不能使用固定的 authority，否则通一个手机上无法安装 2 个使用了本库的 APP；
+
 ### v0.9.4
 
 - 自定义 FileProvider 防止和集成 app 的 FileProvider 冲突；
