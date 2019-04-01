@@ -6,8 +6,8 @@ android {
         applicationId "com.xsir.pgyerappupdate"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 11
-        versionName "1.9.1"
+        versionCode 12
+        versionName "1.9.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -91,7 +91,7 @@ def readProperties(key) {
 }
 
 static def getUpdateDescription() {
-    return '1.发布 V0.9.4 版本库；\n2.修复一些bug；\n3.提升用户体验！'
+    return '1.发布 V0.9.6 版本库；\n2.修复一些bug；\n3.提升用户体验！'
 }
 
 task("uploadApk") {
