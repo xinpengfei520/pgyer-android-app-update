@@ -15,8 +15,8 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
-import com.xsir.pgyerappupdate.library.cons.Constants;
 import com.xsir.pgyerappupdate.library.provider.CustomFileProvider;
+import com.xsir.pgyerappupdate.library.utils.AppInfoUtils;
 import com.xsir.pgyerappupdate.library.utils.ToastUtils;
 import com.xsir.pgyerappupdate.library.utils.XLogUtils;
 
@@ -35,6 +35,7 @@ public class DownLoadService extends Service {
     private static final String APK_NAME = "apkName";
     private static final String DOWNLOAD_URL = "downloadUrl";
     private static final String TAG = "DownLoadService";
+    private static final String SUFFIX = ".update.FileProvider";
 
     private void initDownManager() {
         manager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -168,7 +169,8 @@ public class DownLoadService extends Service {
         intent.setAction(Intent.ACTION_VIEW);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri uriForFile = CustomFileProvider.getUriForFile(context, Constants.AUTHORITY, file);
+            String authority = AppInfoUtils.getPackageName(this) + SUFFIX;
+            Uri uriForFile = CustomFileProvider.getUriForFile(context, authority, file);
             XLogUtils.i(TAG, "file uri path:" + uriForFile.getPath());
 
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);

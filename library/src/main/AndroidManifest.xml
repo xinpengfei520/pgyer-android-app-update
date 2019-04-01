@@ -20,7 +20,7 @@
 
         <provider
             android:name="com.xsir.pgyerappupdate.library.provider.CustomFileProvider"
-            android:authorities="com.xsir.pgyerappupdate.library.FileProvider"
+            android:authorities="${applicationId}.update.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

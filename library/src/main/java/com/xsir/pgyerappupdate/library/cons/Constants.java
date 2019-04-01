@@ -19,9 +19,4 @@ public class Constants {
      * 蒲公英更新接口（v2）
      */
     public static final String PGYER_APP_CHECK_URL = "https://www.pgyer.com/apiv2/app/check";
-
-    /**
-     * FileProvider authority
-     */
-    public static final String AUTHORITY = "com.xsir.pgyerappupdate.library.FileProvider";
 }
