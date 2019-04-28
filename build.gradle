@@ -8,10 +8,9 @@ buildscript {
 
                     'supportLibrary'   : '27.1.1',
 
-                    'libReleaseCode'   : 16,
-                    'libReleaseName'   : '0.9.7'
+                    'libReleaseCode'   : 17,
+                    'libReleaseName'   : '0.9.8'
     ]
-
 
     repositories {
         google()

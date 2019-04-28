@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.view.WindowManager;
 
 import com.xsir.pgyerappupdate.library.cons.Constants;
 import com.xsir.pgyerappupdate.library.service.DownLoadService;
@@ -141,19 +142,24 @@ public class PgyerApi {
             @Override
             public void run() {
                 Activity activity = weakReference.get();
-                if (activity != null) {
-                    new AlertDialog.Builder(activity)
-                            .setTitle("发现新版本")
-                            .setCancelable(false)
-                            .setMessage(TextUtils.isEmpty(buildUpdateDescription) ? defaultDescribe : buildUpdateDescription)
-                            .setPositiveButton("更新", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DownLoadService.startAction(mContext, downloadURL, AppInfoUtils.getPackageName(mContext));
-                                }
-                            })
-                            .setNegativeButton("取消", null)
-                            .show();
+                if (activity != null && !activity.isFinishing()) {
+                    try {
+                        new AlertDialog.Builder(activity)
+                                .setTitle("发现新版本")
+                                .setCancelable(false)
+                                .setMessage(TextUtils.isEmpty(buildUpdateDescription) ? defaultDescribe : buildUpdateDescription)
+                                .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        DownLoadService.startAction(mContext, downloadURL, AppInfoUtils.getPackageName(mContext));
+                                    }
+                                })
+                                .setNegativeButton("取消", null)
+                                .show();
+                    } catch (WindowManager.BadTokenException e) {
+                        XLogUtils.e(TAG, e.toString());
+                        e.printStackTrace();
+                    }
                 }
             }
         });
