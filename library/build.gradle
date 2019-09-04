@@ -86,11 +86,9 @@ task("uploadBintray") {
         println "command:" + command
         try {
             exec {
-                ExecSpec execSpec ->
-                    executable 'bash'
-                    args '-c', command
+                ExecSpec execSpec -> executable 'bash' args '-c', command
             }
-            println "uploadBintray success~"
+            println "Upload to [Bintray] success~"
         } catch (Exception e) {
             e.printStackTrace()
         }

@@ -2,14 +2,14 @@
 
 buildscript {
 
-    ext.versions = ['compileSdkVersion': 27,
+    ext.versions = ['compileSdkVersion': 28,
                     'minSdkVersion'    : 19,
-                    'targetSdkVersion' : 27,
+                    'targetSdkVersion' : 28,
 
-                    'supportLibrary'   : '27.1.1',
+                    'supportLibrary'   : '28.0.0',
 
-                    'libReleaseCode'   : 17,
-                    'libReleaseName'   : '0.9.8'
+                    'libReleaseCode'   : 18,
+                    'libReleaseName'   : '0.9.9'
     ]
 
     repositories {
