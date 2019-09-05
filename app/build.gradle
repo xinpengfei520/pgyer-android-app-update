@@ -6,8 +6,8 @@ android {
         applicationId "com.xsir.pgyerappupdate"
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode 12
-        versionName "1.9.2"
+        versionCode 13
+        versionName "1.9.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -91,7 +91,7 @@ def readProperties(key) {
 }
 
 static def getUpdateDescription() {
-    return '适配 Android P；\n2.修复一些bug；\n3.提升用户体验！'
+    return '使用okhttp3作为网络请求；\n2.修复一些bug；\n3.提升用户体验！'
 }
 
 task("uploadApk") {

@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
-        versionCode versions.libReleaseCode
-        versionName versions.libReleaseName
+        versionCode 19
+        versionName '1.0.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -58,12 +58,19 @@ artifacts {
     archives sourcesJar
 }
 
+def releaseVersion = '1.0.0'
+
 publish {
-    repoName = 'PgyerAndroidAppUpdate' // bintray 仓库名
-    userOrg = 'xinpengfei520' // bintray 注册的用户名
-    groupId = 'com.xsir' // compile 引用时的第 1 部分 groupId
-    artifactId = 'PgyerAndroidAppUpdate' // compile 引用时的第 2 部分项目名
-    publishVersion = versions.libReleaseName // compile引用时的第3部分版本号
+    // bintray 仓库名
+    repoName = 'PgyerAndroidAppUpdate'
+    // bintray 注册的用户名
+    userOrg = 'xinpengfei520'
+    // implementation 引用时的第 1 部分 groupId
+    groupId = 'com.xsir'
+    // implementation 引用时的第 2 部分项目名
+    artifactId = 'PgyerAndroidAppUpdate'
+    // implementation 引用时的第 3 部分版本号
+    publishVersion = releaseVersion
     desc = 'update android app by pgyer app store.'
     website = 'https://github.com/xinpengfei520/pgyer-android-app-update'
 }
