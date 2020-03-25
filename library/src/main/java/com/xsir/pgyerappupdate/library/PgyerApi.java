@@ -84,7 +84,7 @@ public class PgyerApi {
 
         // 拼接请求的参数
         String postStringParam = String.format("?_api_key=%s&appKey=%s&buildVersion=%s&buildBuildVersion=%s", apiKey, appKey, "", "");
-        HttpClientUtils.sendOkhttpRequest(Constants.PGYER_APP_CHECK_URL + postStringParam, new HttpClientUtils.OnRequestCallBack() {
+        HttpClientUtils.sendOkHttpRequest(Constants.PGYER_APP_CHECK_URL + postStringParam, new HttpClientUtils.OnRequestCallBack() {
             @Override
             public void onSuccess(String json) {
                 XLogUtils.i(TAG, "onSuccess():" + json);

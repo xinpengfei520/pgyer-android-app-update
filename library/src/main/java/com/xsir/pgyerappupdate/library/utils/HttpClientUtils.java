@@ -18,7 +18,7 @@ public class HttpClientUtils {
 
     private static final String TAG = "HttpClientUtils";
 
-    public static void sendOkhttpRequest(String url, final HttpClientUtils.OnRequestCallBack callBack) {
+    public static void sendOkHttpRequest(String url, final HttpClientUtils.OnRequestCallBack callBack) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
         Call call = client.newCall(request);
@@ -33,9 +33,7 @@ public class HttpClientUtils {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String message = response.message();
-                XLogUtils.i(TAG, "message===" + message);
-                if (response.isSuccessful() && "OK".equals(message)) {
+                if (response.isSuccessful()) {
                     if (callBack != null) {
                         String respResult = response.body().string();
                         XLogUtils.i(TAG, "respResult===" + respResult);
