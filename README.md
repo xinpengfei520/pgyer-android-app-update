@@ -56,6 +56,10 @@ PgyerApi.checkUpdate(this);
 - 修复请求动态权限有时会出现状态栏白屏的 bug；
 - 其他优化；
 
+### v1.0.1
+
+- 修复bug，不判断响应信息判断 message；
+
 ## FAQ
 
 okhttp3 依赖库冲突；
@@ -64,7 +68,7 @@ okhttp3 依赖库冲突；
 使用 exclude 将其剔除即可：
 
 ```
-implementation('com.xsir:PgyerAndroidAppUpdate:1.0.0', {
+implementation('com.xsir:PgyerAndroidAppUpdate:1.0.1', {
     exclude group: 'com.squareup.okhttp3'
 })
 ```
