@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion versions.compileSdkVersion
@@ -60,20 +60,20 @@ artifacts {
 
 def releaseVersion = '1.0.1'
 
-publish {
-    // bintray 仓库名
-    repoName = 'PgyerAndroidAppUpdate'
-    // bintray 注册的用户名
-    userOrg = 'xinpengfei520'
-    // implementation 引用时的第 1 部分 groupId
-    groupId = 'com.xsir'
-    // implementation 引用时的第 2 部分项目名
-    artifactId = 'PgyerAndroidAppUpdate'
-    // implementation 引用时的第 3 部分版本号
-    publishVersion = releaseVersion
-    desc = 'update android app by pgyer app store.'
-    website = 'https://github.com/xinpengfei520/pgyer-android-app-update'
-}
+//publish {
+//    // bintray 仓库名
+//    repoName = 'PgyerAndroidAppUpdate'
+//    // bintray 注册的用户名
+//    userOrg = 'xinpengfei520'
+//    // implementation 引用时的第 1 部分 groupId
+//    groupId = 'com.xsir'
+//    // implementation 引用时的第 2 部分项目名
+//    artifactId = 'PgyerAndroidAppUpdate'
+//    // implementation 引用时的第 3 部分版本号
+//    publishVersion = releaseVersion
+//    desc = 'update android app by pgyer app store.'
+//    website = 'https://github.com/xinpengfei520/pgyer-android-app-update'
+//}
 
 def readProperties(key) {
     File file = rootProject.file('local.properties')
