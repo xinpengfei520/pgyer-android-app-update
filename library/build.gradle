@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.novoda.bintray-release'
+
+def version = "2.0.0"
 
 android {
     compileSdkVersion versions.compileSdkVersion
@@ -7,7 +8,7 @@ android {
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
         versionCode 20
-        versionName '1.0.1'
+        versionName version
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -21,89 +22,33 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation "com.squareup.okhttp3:okhttp:4.1.0"
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
 }
 
-tasks.withType(Javadoc) {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('charSet', 'UTF-8')
+ext {
+    PUBLISH_GROUP_ID = 'io.github.xinpengfei520'
+    PUBLISH_ARTIFACT_ID = 'PgyerAndroidAppUpdate'
+    PUBLISH_VERSION = version
 }
+apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
 
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-def releaseVersion = '1.0.1'
-
-//publish {
-//    // bintray 仓库名
-//    repoName = 'PgyerAndroidAppUpdate'
-//    // bintray 注册的用户名
-//    userOrg = 'xinpengfei520'
-//    // implementation 引用时的第 1 部分 groupId
-//    groupId = 'com.xsir'
-//    // implementation 引用时的第 2 部分项目名
-//    artifactId = 'PgyerAndroidAppUpdate'
-//    // implementation 引用时的第 3 部分版本号
-//    publishVersion = releaseVersion
-//    desc = 'update android app by pgyer app store.'
-//    website = 'https://github.com/xinpengfei520/pgyer-android-app-update'
-//}
-
-def readProperties(key) {
-    File file = rootProject.file('local.properties')
-    if (file.exists()) {
-        InputStream inputStream = rootProject.file('local.properties').newDataInputStream()
-        Properties properties = new Properties()
-        properties.load(inputStream)
-
-        if (properties.containsKey(key)) {
-            return properties.getProperty(key)
-        }
-    }
-}
-
-task("uploadBintray") {
-    doLast {
-        def command = "../gradlew clean build bintrayUpload -PbintrayUser=xinpengfei520 -PbintrayKey=${readProperties('BINTRAY_KEY')} -PdryRun=false"
-        println "command:" + command
-        try {
-            exec {
-                ExecSpec execSpec -> executable 'bash' args '-c', command
-            }
-            println "Upload to [Bintray] success~"
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-    }
-}
 
 /**
- * 发布到 bintray
- * ./gradlew :library:uploadBintray
+ * 发布到 Maven Central
+ * ./gradlew :library:assemble
+ * ./gradlew signReleasePublication
+ * ./gradlew publish
+ * ./gradlew publishToMavenLocal
+ * ./gradlew publishReleasePublicationToMavenLocal
+ * ./gradlew publishReleasePublicationToPgyerAndroidAppUpdateRepository
+ * ./gradlew generatePomFileForReleasePublication
  */
