@@ -1,0 +1,107 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply plugin: 'maven'
+
+// build a jar with source files
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.source
+    archiveClassifier.set("sources")
+}
+
+task javadoc(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}
+
+// build a jar with javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set("javadoc")
+    from javadoc.destinationDir
+}
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+ext["ossrhUsername"] = ''
+ext["ossrhPassword"] = ''
+
+File localPropertiesFile = project.rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    Properties properties = new Properties()
+    properties.load(new FileInputStream(localPropertiesFile))
+    properties.each { name, value ->
+        ext[name] = value
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId PUBLISH_GROUP_ID
+            artifactId PUBLISH_ARTIFACT_ID
+            version PUBLISH_VERSION
+
+            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = PUBLISH_ARTIFACT_ID
+                description = 'Pgyer Android App Update Library.'
+                url = 'https://github.com/xinpengfei520/pgyer-android-app-update'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'XINPENGFEI'
+                        name = 'XINPENGFEI'
+                        email = '542270559@qq.com'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/xinpengfei520/pgyer-android-app-update/tree/master'
+                    connection = 'scm:git:github.com/xinpengfei520/pgyer-android-app-update.git'
+                    developerConnection = 'scm:git:ssh://github.com/xinpengfei520/pgyer-android-app-update.git'
+                }
+                withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    project.configurations.implementation.allDependencies.each {
+                        if (it.name == "unspecified") {
+                            return
+                        }
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "PgyerAndroidAppUpdate"
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}
