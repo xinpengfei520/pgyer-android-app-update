@@ -8,6 +8,33 @@ A light-weighted library which can update android app by pgyer App Store.
 
 ### step 1:
 
+add maven repo supported:
+
+```
+    repositories {
+        // ...
+        mavenCentral()
+    }
+```
+
+add dependency to your build.gradle:
+
+```
+implementation 'io.github.xinpengfei520:PgyerAndroidAppUpdate:<latest-version>'
+```
+
+Lastest version click to [here](https://github.com/xinpengfei520/pgyer-android-app-update/releases).
+
+then, sync your project, it can download dependency automatically.
+
+if you use **AndroidX**, you need paste below configuration to your 
+
+```
+android.useAndroidX = true
+android.enableJetifier = true
+```
+### step 2:
+
 add below code in your app *AndroidManifest.xml* file.
 
 ```
@@ -21,23 +48,19 @@ add below code in your app *AndroidManifest.xml* file.
         android:value="your app pgyer apiKey" />
 ```
 
-### step 2:
-
-```
-implementation 'com.xsir:PgyerAndroidAppUpdate:<latest-version>'
-```
-
-Lastest version click to [here](https://github.com/xinpengfei520/pgyer-android-app-update/releases).
-
 ### step 3:
 
-In MainActivity onCreate() method:
+In your Activity or other places, such as MainActivity onCreate() method call method:
 
 ```
 PgyerApi.checkUpdate(this);
 ```
 
 ## 2.Update Log
+
+### v2.0.1 
+
+- 迁移到 Maven Central
 
 ### v0.9.4
 
@@ -64,18 +87,14 @@ PgyerApi.checkUpdate(this);
 
 okhttp3 依赖库冲突；
 
-内部依赖了 **okhttp:4.1.0**，如果你们的项目也依赖了 okhttp 可能会导致依赖冲突，可以将你们项目中 okhttp 的版本一致或者
+内部依赖了 **okhttp4.9.0**，如果你们的项目也依赖不同版本的 okhttp 可能会导致依赖冲突，可以将你们项目中 okhttp 的版本修改一致或者
 使用 exclude 将其剔除即可：
 
 ```
-implementation('com.xsir:PgyerAndroidAppUpdate:1.0.1', {
+implementation('io.github.xinpengfei520:PgyerAndroidAppUpdate:2.0.1', {
     exclude group: 'com.squareup.okhttp3'
 })
 ```
-
-## TODO
-
-// TODO: 2019/3/20 使用构建者模式增加更新参数配置
 
 ## LICENSE
 

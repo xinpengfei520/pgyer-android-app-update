@@ -25,12 +25,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url "https://s01.oss.sonatype.org/content/groups/public"
-        }
-//        maven {
-//            url 'file:/Users/pengfeixin/.m2/repository'
-//        }
     }
     tasks.withType(Javadoc) {
         options {

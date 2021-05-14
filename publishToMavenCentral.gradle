@@ -2,19 +2,20 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 apply plugin: 'maven'
 
+// build a jar with source files
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.source
     archiveClassifier.set("sources")
-    //exclude "**/R.class"
-    //exclude "**/BuildConfig.class"
 }
 
 task javadoc(type: Javadoc) {
+    failOnError false
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.javadocDeps
+    classpath += configurations.compile
 }
 
+// build a jar with javadoc
 task javadocJar(type: Jar, dependsOn: javadoc) {
     archiveClassifier.set("javadoc")
     from javadoc.destinationDir
@@ -75,7 +76,6 @@ publishing {
                 withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')
                     project.configurations.implementation.allDependencies.each {
-                        println(it)
                         if (it.name == "unspecified") {
                             return
                         }
@@ -104,8 +104,4 @@ publishing {
 
 signing {
     sign publishing.publications
-}
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 }
