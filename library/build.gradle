@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-def version = "2.0.0"
+def version = "2.0.18"
 
 android {
     compileSdkVersion versions.compileSdkVersion
@@ -27,11 +27,22 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    configurations {
+        javadocDeps
+    }
 }
 
 dependencies {
     implementation "com.android.support:appcompat-v7:${versions.supportLibrary}"
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
+
+    // javadocDeps 没有依赖传递性
+    javadocDeps "com.android.support:support-v4:${versions.supportLibrary}"
+    javadocDeps "com.android.support:support-compat:${versions.supportLibrary}"
+    javadocDeps "com.android.support:appcompat-v7:${versions.supportLibrary}"
+    javadocDeps "com.squareup.okhttp3:okhttp:4.9.0"
+    javadocDeps "com.android.support:support-annotations:${versions.supportLibrary}"
 }
 
 ext {
@@ -39,7 +50,7 @@ ext {
     PUBLISH_ARTIFACT_ID = 'PgyerAndroidAppUpdate'
     PUBLISH_VERSION = version
 }
-apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
+apply from: "${rootProject.projectDir}/publishToMavenCentral.gradle"
 
 
 /**
